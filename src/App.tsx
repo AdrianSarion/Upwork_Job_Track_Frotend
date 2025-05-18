@@ -3,7 +3,14 @@ import { io } from 'socket.io-client';
 import { Container, Typography, Paper, Box } from '@mui/material';
 import WebhookList from './components/WebhookList';
 
-const socket = io('https://upwork-job-track-backend.vercel.app/');
+const socket = io(process.env.NODE_ENV === 'production' 
+  ? 'https://upwork-job-track-backend.vercel.app'
+  : 'http://localhost:5000',
+  {
+    path: '/api/socket.io',
+    transports: ['websocket', 'polling']
+  }
+);
 
 function App() {
   const [webhooks, setWebhooks] = useState<any[]>([]);
